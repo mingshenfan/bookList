@@ -1,0 +1,147 @@
+<!-- 我的 -->
+<template>
+  <view class='container'>
+    <view class="alert" hidden="{{open}}">
+      <view>是否给与我们权限</view>
+      <view class='btn'>
+        <button open-type="getUserInfo" bindgetuserinfo="onGotUserInfo">确定</button>
+        <button @tap="unGotUserInfo">没门</button>
+      </view>
+    </view>
+    <view class='header'>
+      <view>
+        <image src="{{avatarUrl}}" />
+      </view>
+      <view class='nickName'>
+        {{nickName}}
+      </view>
+    </view>
+    <view class='nav'>
+      <navigator url="/pages/user/boolList" class='navtlt'>
+        <view class='img'>
+          <image src='../../images/shu.png' />
+        </view>
+        <view class='tt'>我关注的图书</view>
+        <view class='img'>
+          <image src='../../images/you.png' />
+        </view>
+      </navigator>
+      <navigator url="/pages/user/book" class='navtlt'>
+        <view class='img'>
+          <image src='../../images/shudan.png' />
+        </view>
+        <view class='tt'>我关注的图书单</view>
+        <view class='img'>
+          <image src='../../images/you.png' />
+        </view>
+      </navigator>
+      <navigator url="/pages/index/seach" class='navtlt'>
+        <view class='img'>
+          <image src='../../images/add.png' />
+        </view>
+        <view class='tt'>我创建的书单</view>
+        <view class='img'>
+          <image src='../../images/you.png' />
+        </view>
+      </navigator>
+      <navigator url="/pages/user/idea" class='navtlt'>
+        <view class='img'>
+          <image src='../../images/add.png' />
+        </view>
+        <view class='tt'>意见反馈</view>
+        <view class='img'>
+          <image src='../../images/you.png' />
+        </view>
+      </navigator>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Example extends wepy.page {
+    data = {
+      alertIndex: 0,
+      nickName: '',
+      avatarUrl: '',
+      open: false
+    };
+    components = {};
+    methods = {
+      onGotUserInfo(e) {
+        this.nickName = e.detail.userInfo.nickName
+        this.avatarUrl = e.detail.userInfo.avatarUrl
+        this.open = true
+        this.$apply()
+      },
+      unGotUserInfo() {
+        this.open = true
+        this.$apply()
+      }
+    };
+    events = {};
+    watch = {};
+    computed = {};
+    onShow() {}
+  }
+</script>
+
+<style lang='scss'>
+  .alert {
+    width: 100%;
+    height: 550px;
+    padding-top: 200px;
+    position: fixed;
+    text-align: center;
+    background: #ccc;
+    z-index: 100;
+    .btn {
+      display: flex;
+    }
+  }
+  .header {
+    width: 100%;
+    height: 200px;
+    position: relative;
+    text-align: center;
+    padding-top: 50px;
+    background: orange;
+    .nickName {
+      padding: 20px;
+    }
+    image {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+    }
+  }
+  .nav {
+    width: 90%;
+    height: 200px;
+    background: white;
+    border: 1px solid #dddddd;
+    position: absolute;
+    top: 210px;
+    .navtlt {
+      width: 100%;
+      padding: 0 10px;
+      box-sizing: border-box;
+      border: 1px solid #dddddd;
+      height: 50px;
+      line-height: 50px;
+      display: flex;
+      .img {
+        flex: 1;
+        text-align: center;
+        image {
+          width: 30px;
+          height: 30px;
+          margin: 10px;
+        }
+      }
+      .tt {
+        flex: 3;
+      }
+    }
+  }
+</style>

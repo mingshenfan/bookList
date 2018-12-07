@@ -1,0 +1,36 @@
+<!-- 我的 -->
+<template>
+  <view>
+    <view class='title'><text class='log'>丨</text>猜你喜欢</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Example extends wepy.page {
+    data = {
+      daTa: [],
+      booktt: [],
+      bokkname: [],
+      shuzu: []
+    };
+    components = {};
+    methods = {};
+    events = {};
+    watch = {};
+    computed = {};
+    onLoad() {
+    }
+    onShow() {}
+  }
+</script>
+
+<style lang='scss'>
+  .log {
+    font-weight: bold;
+    color: orange;
+  }
+  .title {
+    margin: 20px 0;
+  }
+</style>

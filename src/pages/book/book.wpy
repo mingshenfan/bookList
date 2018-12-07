@@ -1,0 +1,33 @@
+<!-- 创建书单 -->
+<template>
+  <view class='container'>
+    创建书单
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Example extends wepy.page {
+    config = {
+      navigationBarTitleText: ''
+    };
+    data = {};
+    components = {};
+    methods = {};
+    events = {};
+    watch = {};
+    computed = {};
+    onLoad() {
+      wepy.navigateTo({
+        url: '/pages/book/index'
+      })
+    };
+    onHide() {}
+    onShow() {
+    };
+  }
+</script>
+
+<style lang='scss'>
+
+</style>

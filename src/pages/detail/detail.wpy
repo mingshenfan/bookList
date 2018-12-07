@@ -1,0 +1,235 @@
+<!-- 详情页 -->
+<template>
+  <view class='container'>
+    <view class='header'>
+      <view class='dt'>
+        <image src={{booklist.image}} />
+      </view>
+      <view class='dd'>
+        <view class='h3'>{{booklist.name}}</view>
+        <view class='h4'>{{booklist.author}}</view>
+        <view class='h4'>4.5分|14911人评论</view>
+        <view class='h4'>
+          <text>小说</text>
+          <text>郭金明</text>
+          <text>人际关系</text>
+        </view>
+      </view>
+    </view>
+    <view class='discuss'>
+      <view class='discuss1'>
+        <view class='title'><text class='log'>丨</text>作者简介</view>
+        <view class='h4'>
+          几年前，"数学之美"系列文章获取谷歌黑板报文章获取谷歌黑板报
+        </view>
+      </view>
+      <view class='discuss1'>
+        <view class='title'><text class='log'>丨</text>精彩评论</view>
+        <view class='users'>
+          <view class='user'>子晴 <text class='h4'>2013-02-18</text></view>
+          <view class='h4'>
+            几年前，"数学之美"系列文章获取谷歌黑板报文章获取谷歌黑板报
+          </view>
+        </view>
+        <view class='users'>
+          <view class='user'>子晴 <text class='h4'>2013-02-18</text></view>
+          <view class='h4'>
+            几年前，"数学之美"系列文章获取谷歌黑板报文章获取谷歌黑板报
+          </view>
+        </view>
+      </view>
+      <view class='discuss1'>
+        <view class='title'><text class='log'>丨</text>猜你喜欢</view>
+        <view class='recommend'>
+          <view class='contpList'>
+            <block wx:for="{{6}}" wx:key="{{index}}">
+              <view class='dan'>
+                <image src='http://img3m5.ddimg.cn/14/32/25298375-1_l_1.jpg' />
+                <text>数学之光</text>
+              </view>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class='btn'>
+      <view bindtap='tan'>{{isClick?'已收藏':'收藏'}}</view>
+      <view bindtap='fen'>分享</view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Example extends wepy.page {
+    config = {
+      navigationBarTitleText: ''
+    };
+    data = {
+      booklist: [],
+      isClick: false,
+      ind: 0
+    };
+    components = {};
+    methods = {
+      tan(e) {
+        if (this.isClick === false) {
+          wepy.showToast({
+            title: '已收藏'
+          })
+        } else {
+          wepy.showToast({
+            title: '已取消收藏'
+          })
+        }
+        this.isClick = !this.isClick
+      },
+      fen() {
+        wepy.showActionSheet({
+          itemList: ['分享给朋友', '生成卡片 保存分享'],
+          success: function(res) {
+            wepy.showShareMenu({
+              withShareTicket: true
+            })
+            if (res.tapIndex === /*  */0) {
+              wepy.getShareInfo({
+                shareTicket: res.shareTickets[0],
+                success(res) {},
+                fail() {},
+                complete() {
+                  console.log(res)
+                }
+              })
+            } else if (res.tapIndex === 1) {}
+          },
+          fail: function(res) {}
+        })
+      }
+    };
+    events = {};
+    watch = {};
+    computed = {};
+    onShareAppMessage() {
+      return {
+        title: '发送给2',
+        path: '/pages/detail/detail',
+        imageUrl: 'url',
+        success: res => {
+          console.log('转发成功:' + JSON.stringify(res))
+        },
+        fail: res => {
+          console.log('转发失败:' + JSON.stringify(res))
+        },
+        complete: () => {}
+      }
+    }
+    onLoad(options) {
+      this.ind = Number(options.ind)
+      console.log(this.ind)
+      wepy.showLoading({
+        title: '拼命加载中'
+      })
+      wepy.request({
+        url: 'https://www.easy-mock.com/mock/5b66e3d11fc80e53a3ad62d4/example/booklist',
+        data: 'data',
+        method: 'GET',
+        dataType: 'json',
+        success: res => {
+          res.data.content.map((item) => {
+            if (Number(options.id) === item.id) {
+              this.booklist = item.detailList[this.ind]
+              this.$apply()
+              console.log(this.booklist)
+            }
+          })
+        }
+      })
+      wepy.hideLoading()
+    }
+    onShow() {};
+  }
+</script>
+
+<style lang='scss'>
+  .btn {
+    width: 100%;
+    height: 80rpx;
+    line-height: 80rpx;
+    display: flex;
+    color: orange;
+    font-size: 28rpx;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    view {
+      flex: 1;
+      text-align: center;
+      background: #eee;
+    }
+  }
+  .h4 {
+    color: darkgray;
+    font-size: 28rpx;
+  }
+  .header {
+    width: 100%;
+    display: flex;
+    .dt {
+      flex: 2;
+      image {
+        width: 100%;
+        height: 150px;
+      }
+    }
+    .dd {
+      flex: 3;
+      padding: 10px;
+      .h4 {
+        color: darkgray;
+        font-size: 28rpx;
+        text {
+          display: inline-block;
+          padding: 5px;
+          margin: 5px;
+          background: #eee;
+        }
+      }
+    }
+  }
+  .discuss1 {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    .contpList {
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-wrap: wrap;
+      .dan {
+        width: 33%;
+        height: 200rpx;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 24rpx;
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .log {
+      font-weight: bold;
+      color: orange;
+    }
+    .title {
+      margin: 20px 0;
+    }
+    .user {
+      padding: 10px 0;
+    }
+    .users {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+  }
+</style>

@@ -1,0 +1,200 @@
+<!-- 首页 -->
+<template>
+  <view class='index'>
+    <navigator class='search' url="/pages/index/seach">
+      <icon size='18' type='search'></icon>
+      <input placeholder='输入书名、作者、书单名进行搜索' />
+    </navigator>
+    <view class='sw'>
+      <swiper duration='500' previous-margin='30px' next-margin='30px' bindchange="handleChange" indicator-dots>
+        <repeat for="{{booklist}}" key="index" class="itemImg {{currentIndex == index ? 'active': ''}}">
+          <swiper-item>
+            <view class='cont' bindtap='detaillist()' data-id='{{item.id}}'>
+              <view class='contp'>
+                <view class='contpTop'>
+                  <view class='h3'>{{item.name}}</view>
+                  <view>——</view>
+                  <view>{{item.profile}}</view>
+                </view>
+                <view class='contpList'>
+                  <repeat for="{{item.detailList}}" key="index">
+                    <view class='dan'>
+                      <image src={{item.image}}/>
+                      <text>{{item.name}}</text>
+                    </view>
+                  </repeat>
+                </view>
+                <view class='contpBom'>
+                  <view><text>{{item.attentionCount}}</text>人关注</view>
+                  <view></view>
+                  <view>{{item.userName}}</view>
+                </view>
+              </view>
+            </view>
+          </swiper-item>
+        </repeat>
+      </swiper>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Example extends wepy.page {
+    config = {
+      navigationBarTitleText: '一品书单'
+    };
+    data = {
+      currentIndex: 0,
+      booklist: [],
+      shulist: []
+    };
+    handleChange(e) {
+      this.currentIndex = e.detail.current
+    };
+    detaillist(e) {
+      let detailID = e.currentTarget.dataset.id
+      wepy.navigateTo({
+        url: '/pages/index/bookList?id=' + detailID
+      })
+    }
+    components = {};
+    methods = {};
+    events = {};
+    watch = {};
+    computed = {};
+    onLoad() {
+      wepy.showLoading({
+        title: '拼命加载中'
+      })
+      wepy.request({
+        url: 'https://www.easy-mock.com/mock/5b66e3d11fc80e53a3ad62d4/example/booklist',
+        data: 'data',
+        method: 'GET',
+        dataType: 'json',
+        success: res => {
+          console.log(res.data.content)
+          this.booklist = res.data.content
+          this.shulist = res.data.content
+          this.$apply()
+        }
+      })
+      wepy.hideLoading()
+    };
+    onShow() {};
+  }
+</script>
+
+<style lang='scss'>
+  .index {
+    width: 100%;
+    height: 545px;
+    background: wheat;
+    padding-top: 10px;
+  }
+  .search {
+    opacity: 0.7;
+    margin-left: 5%;
+    z-index: 100;
+    background: whitesmoke;
+    width: 90%;
+    height: 40px;
+    display: flex;
+    border-radius: 30px;
+    icon {
+      padding: 13px 10px;
+    }
+    input {
+      height: 40px;
+      line-height: 40px;
+      width: 100%;
+      margin-left: 20px;
+      font-size: 16px;
+    }
+  }
+  .itemImg {
+    z-index: 15;
+    opacity: 0.7;
+  }
+  .active {
+    opacity: 1;
+    z-index: 10;
+    transition: all .2s ease-in 0s;
+  }
+  .cont {
+    width: 90%;
+    height: 380px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    margin-left: 5%;
+    position: relative;
+    background: white;
+    .contp {
+      width: 90%;
+      margin-left: 5%;
+      box-sizing: border-box;
+      .contpTop {
+        margin: 30rpx 0;
+        width: 100%;
+        text-align: center;
+        font-size: 24rpx;
+        .h3 {
+          font-size: 28rpx;
+          font-weight: bold;
+        }
+      }
+      .contpList {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        .dan {
+          width: 33%;
+          height: 200rpx;
+          text-align: center;
+          margin-bottom: 30px;
+          font-size: 24rpx;
+          image {
+            width: 90%;
+            height: 100%;
+          }
+          text {
+            display: block;
+            width: 90%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+          }
+        }
+      }
+      .contpBom {
+        width: 100%;
+        height: 40rpx;
+        display: flex;
+        font-size: 24rpx;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        justify-content: space-between;
+        view {
+          flex: 1;
+          display: block;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .sw {
+    width: 100%;
+    height: 450px;
+    margin-top: 10px;
+    swiper {
+      width: 100%;
+      height: 100%;
+      swiper-item {
+        width: 100%;
+        height: 90%;
+      }
+    }
+  }
+</style>

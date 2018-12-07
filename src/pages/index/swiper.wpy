@@ -1,0 +1,66 @@
+<!--  -->
+<template>
+  <view class='container'>
+    <swiper class="imageContainer" bindchange="handleChange" previous-margin="50rpx" next-margin="50rpx" circular autoplay>
+      <block wx:for="{{3}}" wx:key="{{index}}">
+        <swiper-item class="item">
+          {{currentIndex == index}}
+          <image class="itemImg {{currentIndex == index ? 'active': ''}}" src='http://img3m5.ddimg.cn/14/32/25298375-1_l_1.jpg' />
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Example extends wepy.page {
+    config = {
+      navigationBarTitleText: ''
+    };
+    data = {
+      currentIndex: 0
+    };
+    handleChange(e) {
+      this.currentIndex = e.detail.current
+    }
+    components = {};
+    methods = {};
+    events = {};
+    watch = {};
+    computed = {};
+    onLoad() {};
+    onShow() {};
+  }
+</script>
+
+<style lang='scss'>
+  page {
+    background: #f7f7f7f7;
+  }
+  .imageContainer {
+    width: 100%;
+    height: 500rpx;
+    background: #000;
+  }
+  .item {
+    height: 500rpx;
+    color: aqua;
+  }
+  .itemImg {
+    position: absolute;
+    width: 100%;
+    height: 380rpx;
+    border-radius: 15rpx;
+    z-index: 5;
+    opacity: 0.7;
+    top: 13%;
+  }
+  .active {
+    opacity: 1;
+    z-index: 10;
+    height: 430rpx;
+    top: 7%;
+    transition: all .2s ease-in 0s;
+  }
+</style>

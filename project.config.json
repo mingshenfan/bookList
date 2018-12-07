@@ -1,0 +1,15 @@
+{
+	"description": "A WePY project",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": true,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wx136d5264341358d9",
+	"projectname": "booklists",
+	"miniprogramRoot": "dist/",
+	"condition": {}
+}

@@ -1,0 +1,82 @@
+<!--  -->
+<template>
+  <view class='btn'>
+    <view bindtap='tan'>{{isClick?'已收藏':'收藏'}}</view>
+    <view bindtap='fen'>分享</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Example extends wepy.component {
+    props = {};
+    data = {
+      job: [],
+      jobList: [],
+      id: '',
+      isClick: false,
+      jobStorage: [],
+      jobId: '',
+      tan: '关注'
+    };
+    components = {};
+    methods = {
+      tan() {
+        if (this.open === false) {
+          wepy.showToast({
+            title: '成功',
+            icon: 'success',
+            duration: 2000
+          })
+          this.tan = '取消关注'
+          this.open = true
+          this.$apply()
+        } else if (this.open === true) {
+          wepy.showToast({
+            title: '取关成功',
+            icon: 'success',
+            duration: 2000
+          })
+          this.tan = '关注'
+          this.open = false
+          this.$apply()
+        }
+      },
+      fen() {
+        wepy.showActionSheet({
+          itemList: ['分享给朋友', '生成卡片 保存分享'],
+          success: function(res) {
+            wepy.showShareMenu({
+              withShareTicket: true
+            })
+          },
+          fail: function(res) {}
+        })
+      }
+    };
+    events = {};
+    watch = {};
+    computed = {};
+    onLoad() {};
+    onShow() {};
+  }
+</script>
+
+<style lang='scss'>
+  .btn {
+    width: 100%;
+    height: 80rpx;
+    line-height: 80rpx;
+    display: flex;
+    color: orange;
+    font-size: 28rpx;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    view {
+      flex: 1;
+      text-align: center;
+      background: #eee;
+    }
+  }
+</style>

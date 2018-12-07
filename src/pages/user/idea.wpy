@@ -1,0 +1,27 @@
+<!-- 意见反馈 -->
+<template>
+  <view>
+    <textarea placeholder='请描述您的反馈，最多140字'></textarea>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Example extends wepy.page {
+    config = {
+      navigationBarTitleText: '意见反馈'
+    };
+    data = {};
+    components = {};
+    methods = {};
+    events = {};
+    watch = {};
+    computed = {};
+    onLoad() {};
+    onShow() {};
+  }
+</script>
+
+<style lang='scss'>
+
+</style>

@@ -1,0 +1,189 @@
+<!-- 菜单列表 -->
+<template>
+  <view class='bookList'>
+    <repeat key="index">
+      <view class='listTop'>
+        <view class='h3'><text>{{booklist.name}}</text></view>
+        <view class='h4'><text>{{booklist.profile}}</text></view>
+      </view>
+    </repeat>
+    <repeat for="{{booklist.detailList}}" key="index">
+      <view class='main' bindtap='tiaodetail({{index}})'>
+        <view class='tt'>
+          <view class='title'>{{item.name}}</view>
+          <view class='text'>{{item.comment}}</view>
+        </view>
+        <view class='img'>
+          <image src={{item.image}}/>
+        </view>
+      </view>
+    </repeat>
+    <view class='btn'>
+      <view bindtap='tan'>{{isClick?'已收藏':'收藏'}}</view>
+      <view bindtap='fen'>分享</view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Example extends wepy.page {
+    data = {
+      tan: '关注',
+      booklist: [],
+      shulist: [],
+      id: '',
+      isClick: false,
+      ddtaid: null,
+      info: {},
+      addlist: [],
+      keyid: null
+    };
+    components = {};
+    methods = {
+      tiaodetail(ind) {
+        wepy.navigateTo({
+          url: '/pages/detail/detail?id=' + this.ddtaid + '&ind=' + ind
+        })
+      },
+      tan(e) {
+        wepy.getStorage({
+          key: 'keyid',
+          success: function(res) {
+            this.keyid = res.datat3
+            console.log(this.keyid)
+          }
+        })
+        this.addlist.push(this.booklist)
+        if (this.isClick === false) {
+          wepy.showToast({
+            title: '已收藏'
+          })
+          console.log(this.keyid)
+          console.log('booklist页面', wepy.getStorageSync('item'))
+          let items = wepy.setStorageSync('key', this.addlist)
+          wepy.setStorageSync('keyid', false)
+        } else {
+          wepy.showToast({
+            title: '已取消收藏'
+          })
+          console.log('booklist页面', wepy.getStorageSync('item'))
+          let items = wepy.setStorageSync('key', this.booklist)
+          wepy.removeStorageSync('key')
+          wepy.setStorageSync('keyid', true)
+        }
+      },
+      fen() {
+        wepy.showActionSheet({
+          itemList: ['分享给朋友', '生成卡片 保存分享'],
+          success: function(res) {
+            wepy.showShareMenu({
+              withShareTicket: true
+            })
+          },
+          fail: function(res) {}
+        })
+      }
+    };
+    events = {};
+    watch = {};
+    computed = {};
+    onLoad(options) {
+      wepy.showLoading({
+        title: '拼命加载中'
+      })
+      wepy.request({
+        url: 'https://www.easy-mock.com/mock/5b66e3d11fc80e53a3ad62d4/example/booklist',
+        data: 'data',
+        method: 'GET',
+        dataType: 'json',
+        success: res => {
+          res.data.content.map((item, ind) => {
+            if (Number(options.id) === item.id) {
+              this.booklist = item
+              this.$apply()
+            }
+          })
+          res.data.content.map((item, ind) => {
+            if (Number(options.id) === item.id) {
+              this.ddtaid = item.id
+              this.$apply()
+            }
+          })
+          this.$apply()
+        }
+      })
+      wepy.hideLoading()
+    }
+    onShow() {}
+  }
+</script>
+
+<style lang='scss'>
+  .bookList {
+    width: 100%;
+    .btn {
+      width: 100%;
+      height: 80rpx;
+      line-height: 80rpx;
+      display: flex;
+      color: orange;
+      font-size: 28rpx;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      view {
+        flex: 1;
+        text-align: center;
+        background: #eee;
+      }
+    }
+    .main {
+      border-bottom: 1px solid #eee;
+      width: 100%;
+      height: 160rpx;
+      display: flex;
+      box-sizing: border-box;
+      padding: 10rpx 20rpx;
+      margin: 20rpx 0;
+      .tt {
+        flex: 3;
+        width: 100%;
+        height: 100%;
+        .title {
+          font-size: 28rpx;
+        }
+        .text {
+          font-size: 24rpx;
+          color: #ccc;
+        }
+      }
+      .img {
+        width: 100%;
+        height: 100%;
+        flex: 1;
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .listTop {
+      width: 100%;
+      border-bottom: 1px solid #eee;
+      view {
+        width: 100%;
+        text-align: center;
+      }
+      .h3 {
+        margin-top: 30rpx;
+        font-size: 28rpx;
+      }
+      .h4 {
+        font-size: 24rpx;
+        color: #ccc;
+        padding: 15px 0;
+      }
+    }
+  }
+</style>
